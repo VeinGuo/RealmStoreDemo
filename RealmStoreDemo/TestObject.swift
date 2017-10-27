@@ -16,6 +16,14 @@ class TestObject: Object {
     // 默认 为nil
     let stature = RealmOptional<Int>()
 
+    // 便利构造
+    convenience init(id: Int, name: String, gender: String) {
+        self.init()
+        self.id = id
+        self.name = name
+        self.gender = gender
+    }
+    
     // 设置主键
     override static func primaryKey() -> String? {
         return "id"
