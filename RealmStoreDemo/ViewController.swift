@@ -11,8 +11,25 @@ import RealmSwift
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var logTextView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        creatDataBase("testDB")
+    }
+    
+    func creatDataBase(_ name: String) {
+        let path = dataBasePath()
+        let filePath = path + "/\(name).realm"
+        var config = Realm.Configuration()
+        config.fileURL = URL(fileURLWithPath: filePath)
+        // 将这个配置应用到默认的 Realm 数据库当中
+        Realm.Configuration.defaultConfiguration = config
+    }
+    
+    func dataBasePath() -> String {
+        let ducumentPath = NSHomeDirectory() + "/Documents"
+        return ducumentPath
     }
     
     @IBAction func onSave(_ sender: UIButton) {
@@ -31,7 +48,7 @@ class ViewController: UIViewController {
         do {
             let realm =  try Realm()
             let objects: Results<TestObject> = realm.objects(TestObject.self)
-            print(objects)
+            printLog(objects.description)
         } catch {
             print(error)
         }
@@ -46,9 +63,9 @@ class ViewController: UIViewController {
                     realm.add(object, update: true)
                 }
             }
-            print(realm.configuration.fileURL ?? "")
+            printLog(realm.configuration.fileURL?.absoluteString ?? "")
         } catch {
-            print(error)
+            printLog(error.localizedDescription)
         }
     }
     
@@ -66,7 +83,7 @@ class ViewController: UIViewController {
         let stature = 170
         let objects: Results<TestObject> = realm.objects(TestObject.self)
         let filterObjects = objects.filter("stature > \(stature)")
-        print(filterObjects)
+        printLog(filterObjects.description)
     }
     
     func testObjects() -> [TestObject] {
@@ -93,6 +110,11 @@ class ViewController: UIViewController {
         return [testObjet0, testObjet1,
                 testObjet2, testObjet3,
                 testObjet4]
+    }
+    
+    func printLog(_ log: String) {
+        logTextView.text = log
+        print(log)
     }
 }
 
