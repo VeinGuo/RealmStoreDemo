@@ -51,6 +51,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NxH-nK-fP5">
+                                <rect key="frame" x="242" y="318" width="113" height="30"/>
+                                <state key="normal" title="Local Migrations"/>
+                                <connections>
+                                    <action selector="onLocalMigrations:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5dh-PE-yH8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -61,7 +68,9 @@
                             <constraint firstAttribute="trailing" secondItem="S8h-BX-v0Z" secondAttribute="trailing" id="RsU-zC-D6P"/>
                             <constraint firstItem="Nsq-1G-1nS" firstAttribute="centerY" secondItem="0uY-ga-jTq" secondAttribute="centerY" id="WEi-wg-AeL"/>
                             <constraint firstAttribute="trailing" secondItem="r8z-2q-p8v" secondAttribute="trailing" constant="164" id="auY-Zv-3V1"/>
+                            <constraint firstAttribute="trailing" secondItem="NxH-nK-fP5" secondAttribute="trailing" constant="20" id="by0-VY-50R"/>
                             <constraint firstItem="0uY-ga-jTq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="dPD-h3-UQi"/>
+                            <constraint firstItem="NxH-nK-fP5" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="nba-gt-o65"/>
                             <constraint firstItem="0uY-ga-jTq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="xif-sZ-KVK"/>
                             <constraint firstItem="r8z-2q-p8v" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Nsq-1G-1nS" secondAttribute="trailing" constant="8" symbolic="YES" id="zB1-76-cdq"/>
                         </constraints>

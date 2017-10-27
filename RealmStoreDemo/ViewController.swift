@@ -23,25 +23,35 @@ class ViewController: UIViewController {
         let filePath = path + "/\(name).realm"
         var config = Realm.Configuration()
         config.fileURL = URL(fileURLWithPath: filePath)
+        config.schemaVersion = 0
         // 将这个配置应用到默认的 Realm 数据库当中
         Realm.Configuration.defaultConfiguration = config
+    }
+    
+    // MARK: 数据迁移
+    func localMigrations() {
+        var defaultConfiguration = Realm.Configuration.defaultConfiguration
+        defaultConfiguration.schemaVersion = 1
+        defaultConfiguration.migrationBlock = { migration, oldSchemaVersion in
+            
+            if oldSchemaVersion < 1 {
+                migration.enumerateObjects(ofType: TestObject.className()) { oldObject, newObject in
+                    // 将ID主键进行修改，每一位都增加 1
+                    let id = oldObject!["id"] as! Int
+                    newObject!["id"] = id + 1
+                }
+            }
+            // 修改类名
+            //                if oldSchemaVersion < UInt64(1.1) {
+            //                    migration.renameProperty(onType: TestObject.className(), from: "name", to: "rename")
+            //                }
+        }
+        Realm.Configuration.defaultConfiguration = defaultConfiguration
     }
     
     func dataBasePath() -> String {
         let ducumentPath = NSHomeDirectory() + "/Documents"
         return ducumentPath
-    }
-    
-    @IBAction func onSave(_ sender: UIButton) {
-        saveTestObjects()
-    }
-    
-    @IBAction func onLoad(_ sender: UIButton) {
-        loadTestObjects()
-    }
-    
-    @IBAction func onFilter(_ sender: UIButton) {
-        filterObjects()
     }
     
     func loadTestObjects() {
@@ -115,7 +125,27 @@ class ViewController: UIViewController {
     func printLog(_ log: String) {
         logTextView.text = log
         print(log)
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "")
     }
 }
 
+// MARK: Event
+extension ViewController {
+    @IBAction func onSave(_ sender: UIButton) {
+        saveTestObjects()
+    }
+    
+    @IBAction func onLoad(_ sender: UIButton) {
+        loadTestObjects()
+    }
+    
+    @IBAction func onFilter(_ sender: UIButton) {
+        filterObjects()
+    }
+    
+    @IBAction func onLocalMigrations(_ sender: UIButton) {
+        localMigrations()
+    }
+    
+}
 
