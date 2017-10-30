@@ -23,15 +23,15 @@ class ViewController: UIViewController {
         let filePath = path + "/\(name).realm"
         var config = Realm.Configuration()
         config.fileURL = URL(fileURLWithPath: filePath)
-        config.schemaVersion = 0
         // 将这个配置应用到默认的 Realm 数据库当中
         Realm.Configuration.defaultConfiguration = config
+        localMigrations()
     }
     
     // MARK: 数据迁移
     func localMigrations() {
         var defaultConfiguration = Realm.Configuration.defaultConfiguration
-        defaultConfiguration.schemaVersion = 1
+        defaultConfiguration.schemaVersion = 2
         defaultConfiguration.migrationBlock = { migration, oldSchemaVersion in
             
             if oldSchemaVersion < 1 {
@@ -41,10 +41,18 @@ class ViewController: UIViewController {
                     newObject!["id"] = id + 1
                 }
             }
-            // 修改类名
-            //                if oldSchemaVersion < UInt64(1.1) {
-            //                    migration.renameProperty(onType: TestObject.className(), from: "name", to: "rename")
-            //                }
+            
+            // 增加新字段
+            if oldSchemaVersion < 2 {
+                migration.enumerateObjects(ofType: TestObject.className(), { (oldObject, newObject) in
+                    newObject!["work"] = ""
+                })
+            }
+            
+            // 修改字段名
+//            if oldSchemaVersion < 3 {
+//                migration.renameProperty(onType: TestObject.className(), from: "name", to: "rename")
+//            }
         }
         Realm.Configuration.defaultConfiguration = defaultConfiguration
     }
